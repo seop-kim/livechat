@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: livechat
+  profiles:
+    active: local
+    group:
+      local:
+        - secret
