@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script>
+        function validateForm() {
+            var nickname = document.getElementById("nickname").value;
+            var password = document.getElementById("password").value;
+
+            if (nickname === "" || password === "") {
+                alert("Please enter both nickname and password.");
+                return false; // 폼 전송을 취소함
+            }
+            return true; // 폼 전송을 진행함
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <form th:action method="post" th:object="${loginRequest}" onsubmit="return validateForm()">
+        <div>
+            <label for="nickname">Nickname:</label>
+            <input type="text" id="nickname" name="nickname" placeholder="Enter your nickname">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+    <a th:href="@{/member/join}">Sign up</a>
+</div>
+</body>
+</html>
