@@ -10,7 +10,7 @@ import org.springframework.web.socket.WebSocketSession;
 @Getter
 @Builder
 public class ChatRoomResponseDTO {
-    private String roomId;
+    private String id;
 
     private String name;
 
@@ -19,7 +19,7 @@ public class ChatRoomResponseDTO {
 
     public static ChatRoomResponseDTO create(String name) {
         return ChatRoomResponseDTO.builder()
-                .roomId(UUID.randomUUID().toString())
+                .id(UUID.randomUUID().toString())
                 .name(name)
                 .build();
     }

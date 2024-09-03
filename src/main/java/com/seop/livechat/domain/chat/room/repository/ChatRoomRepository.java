@@ -14,7 +14,7 @@ public class ChatRoomRepository {
 
     public ChatRoomResponseDTO create(String name) {
         ChatRoomResponseDTO room = ChatRoomResponseDTO.create(name);
-        chatRooms.put(room.getRoomId(), room);
+        chatRooms.put(room.getId(), room);
         return room;
     }
 
