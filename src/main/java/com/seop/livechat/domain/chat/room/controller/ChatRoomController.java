@@ -1,41 +1,46 @@
 package com.seop.livechat.domain.chat.room.controller;
 
-import com.seop.livechat.domain.chat.room.repository.ChatRoomRepository;
+import com.seop.livechat.domain.chat.room.dto.response.ChatRoomResponseDTO;
+import com.seop.livechat.domain.chat.room.service.ChatRoomService;
 import com.seop.livechat.global.user.UserPrincipal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(value = "/chat")
+@RequestMapping(value = "/room")
 public class ChatRoomController {
-    private final ChatRoomRepository repository;
+    private final ChatRoomService chatRoomService;
 
-    @GetMapping(value = "/rooms")
+    @GetMapping
     public String rooms(Model model) {
-        model.addAttribute("list", repository.findAll());
+        List<ChatRoomResponseDTO> response = chatRoomService.getRooms();
+        model.addAttribute("list", response);
         return "domain/chat/rooms";
     }
 
-    @PostMapping(value = "/room")
-    public String create(@RequestParam String name, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("roomName", repository.create(name));
-        return "redirect:/chat/rooms";
+    @PostMapping
+    public String create(@AuthenticationPrincipal UserPrincipal user, @RequestParam String name) {
+        chatRoomService.addRoom(user.getMember(), name);
+        return "redirect:/room";
     }
 
-    @GetMapping("/room")
-    public String getRoom(@AuthenticationPrincipal UserPrincipal user, String roomId, Model model) {
-        log.info("roomId : " + roomId);
-        model.addAttribute("room", repository.findById(roomId));
+    @GetMapping("{id}")
+    public String getRoom(@AuthenticationPrincipal UserPrincipal user,
+                          @PathVariable("id") Long id,
+                          Model model) {
+        log.info("roomId : " + id);
+        model.addAttribute("room", chatRoomService.getRoom(id));
         model.addAttribute("username", user.getUsername());
         return "domain/chat/room";
     }

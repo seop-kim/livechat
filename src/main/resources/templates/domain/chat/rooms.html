@@ -8,11 +8,11 @@
 <div>
     <div>
         <ul th:each="room : ${list}">
-            <li><a th:href="@{/chat/room(roomId=${room.id})}">[[${room.name}]]</a></li>
+            <li><a th:href="@{|/room/${room.id}|}">[[${room.name}]]</a></li>
         </ul>
     </div>
 </div>
-<form th:action="@{/chat/room}" method="post">
+<form th:action="@{/room}" method="post">
     <input type="text" name="name" class="form-control">
     <button class="btn btn-secondary" id="btn-create">개설하기</button>
 </form>

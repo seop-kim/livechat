@@ -17,11 +17,15 @@ public class StompChatController {
     public void enter(ChatMsgRequestDTO message) {
         message.setMessage("님이 채팅방에 참여하였습니다.");
         log.info(message.getWriter() + "님이 채팅방에 참여하였습니다.");
+        // TODO
+        //  DB
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
     @MessageMapping(value = "/chat/message")
     public void message(ChatMsgRequestDTO message) {
+        // TODO
+        //  DB
         log.info(message.getRoomId() + " 방에 " + message.getWriter() + " 회원이 '" + message.getMessage()+"'를 보냈습니다.");
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }

@@ -18,7 +18,7 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         log.info("session.getPrincipal().getName() [ " + session.getPrincipal().getName() + " ]");
-        log.info("msg [ " + payload + " ]");
+        log.info("msg [ " + session.getPrincipal().getName() + payload + " ]");
 
         // 메시지에 username을 추가
         String messageWithUsername = session.getPrincipal().getName() + ": " + payload;
