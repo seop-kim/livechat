@@ -14,9 +14,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
-        Member member = memberRepository.findByNickname(phoneNumber)
-                .orElseThrow(() -> new UsernameNotFoundException("phoneNumber doesn't exist"));
+    public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
+        Member member = memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new UsernameNotFoundException("This account doesn't exist."));
         return UserPrincipal.create(member);
     }
 }
