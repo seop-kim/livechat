@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ChatController {
     @GetMapping("/chat")
-    public String chat(@AuthenticationPrincipal UserPrincipal user, Model model){
+    public String chat(@AuthenticationPrincipal UserPrincipal user, Model model) {
         model.addAttribute("username", user.getUsername());
         return "domain/chat/chat";
     }
