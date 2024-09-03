@@ -1,5 +1,3 @@
-import {checkSession} from './session.js';
-
 $(document).ready(function () {
     const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
@@ -72,11 +70,4 @@ $(document).ready(function () {
             `;
         $("#msgArea").append(messageHtml);
     }
-
-    // 세션 상태를 확인하고 세션 만료 시 로그아웃 처리
-    checkSession(() => {
-        websocket.close();
-        alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-        window.location.href = '/member/login';
-    });
 });
