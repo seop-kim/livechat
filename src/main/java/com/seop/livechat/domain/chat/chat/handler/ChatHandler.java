@@ -1,4 +1,4 @@
-package com.seop.livechat.domain.chat.handler;
+package com.seop.livechat.domain.chat.chat.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +17,27 @@ public class ChatHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        log.info("msg : " + payload);
+        log.info("session.getPrincipal().getName() [ " + session.getPrincipal().getName() + " ]");
+        log.info("msg [ " + payload + " ]");
 
-        for(WebSocketSession sess: CHAT_LIST) {
-            sess.sendMessage(message);
+        // 메시지에 username을 추가
+        String messageWithUsername = session.getPrincipal().getName() + ": " + payload;
+
+        // 모든 세션에 수정된 메시지 전송
+        for (WebSocketSession sess : CHAT_LIST) {
+            sess.sendMessage(new TextMessage(messageWithUsername));
         }
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         CHAT_LIST.add(session);
-        log.info(session + " client in");
+        log.info(session.getPrincipal().getName() + " client in");
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         CHAT_LIST.remove(session);
-        log.info(session + " client out");
+        log.info(session.getPrincipal().getName() + " client out");
     }
 }

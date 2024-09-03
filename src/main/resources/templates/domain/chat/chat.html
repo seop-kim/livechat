@@ -2,70 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Chat</title>
+    <script src="/js/chat.js" type="module" defer></script>
     <script th:inline="javascript">
-        $(document).ready(function () {
-            const username = /*[[${#authentication.principal.username}]]*/ 'guest';
-
-            $("#disconn").on("click", (e) => {
-                disconnect();
-            });
-
-            $("#button-send").on("click", (e) => {
-                console.log("send click!!");
-                send();
-            });
-
-            const websocket = new WebSocket("ws://localhost:8080/ws/chat");
-
-            websocket.onmessage = onMessage;
-            websocket.onopen = onOpen;
-            websocket.onclose = onClose;
-
-            function send() {
-                let msg = document.getElementById("msg");
-                console.log(username + ":" + msg.value);
-                websocket.send(username + ":" + msg.value);
-                msg.value = '';
-            }
-
-            function onClose(evt) {
-                var str = username + ": 님이 방을 나가셨습니다.";
-                websocket.send(str);
-            }
-
-            function onOpen(evt) {
-                var str = username + ": 님이 입장하셨습니다.";
-                websocket.send(str);
-            }
-
-            function onMessage(msg) {
-                var data = msg.data;
-                var arr = data.split(":");
-
-                console.log('Message received: ', data);
-
-                var sessionId = arr[0];
-                var message = arr[1];
-
-                console.log("sessionId : " + sessionId);
-                console.log("username : " + username);
-
-                // 로그인 한 클라이언트와 타 클라이언트를 분류하기 위함
-                if (sessionId === username) {
-                    var str = "<div class='col-6'>";
-                    str += "<div class='alert alert-secondary'>";
-                    str += "<b>" + sessionId + "  :  " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
-                } else {
-                    var str = "<div class='col-6'>";
-                    str += "<div class='alert alert-warning'>";
-                    str += "<b>" + sessionId + "  :  " + message + "</b>";
-                    str += "</div></div>";
-                    $("#msgArea").append(str);
-                }
-            }
-        });
+        const username = /*[[${username}]]*/ 'guest';
     </script>
 </head>
 <body layout:fragment="content">

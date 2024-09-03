@@ -36,7 +36,13 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/member/login")
                         .usernameParameter("nickname")
-                        .defaultSuccessUrl("/chat")
+                        .defaultSuccessUrl("/chat", true)
+                )
+
+                .sessionManagement(session -> session
+                        .maximumSessions(1)  // 최대 세션 수를 1로 설정
+                        .maxSessionsPreventsLogin(false)  // 새로운 로그인 시 기존 세션 무효화
+                        .expiredUrl("/member/login")  // 세션이 만료되면 이동할 URL
                 )
 
                 .logout((logout) -> logout
@@ -55,7 +61,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
