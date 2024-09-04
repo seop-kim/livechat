@@ -32,6 +32,7 @@ $(document).ready(function () {
         if (msg) {
             stomp.send('/pub/chat/message', {}, JSON.stringify({
                 roomId: roomId,
+                memberId: memberId,
                 message: msg,
                 writer: username
             }));
@@ -46,7 +47,7 @@ $(document).ready(function () {
             `
                     <div class='col-6'>
                         <div class='alert ${alertClass}'>
-                            <b>${writer} : ${message}</b>
+                            <b>${writer} ${message}</b>
                         </div>
                     </div>`;
         $("#msgArea").append(messageHtml);

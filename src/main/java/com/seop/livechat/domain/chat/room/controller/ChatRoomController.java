@@ -41,7 +41,7 @@ public class ChatRoomController {
                           Model model) {
         log.info("roomId : " + id);
         model.addAttribute("room", chatRoomService.getRoom(id));
-        model.addAttribute("username", user.getUsername());
+        model.addAttribute("member", user.getMember());
         return "domain/chat/room";
     }
 }

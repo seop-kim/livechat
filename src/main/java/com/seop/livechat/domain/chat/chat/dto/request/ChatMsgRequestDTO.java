@@ -1,4 +1,4 @@
-package com.seop.livechat.domain.chat.room.dto.request;
+package com.seop.livechat.domain.chat.chat.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ChatMsgRequestDTO {
-    private String roomId;
+    private Long roomId;
     private String writer;
+    private Long memberId;
     private String message;
 }
