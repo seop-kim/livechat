@@ -1,0 +1,49 @@
+<html layout:decorate="~{global/user_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatRooms</title>
+    <script src="/js/rooms.js" type="module" defer></script>
+    <style>
+        table {
+            width: 50%;
+            margin: auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .create-room {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+        }
+    </style>
+</head>
+<body layout:fragment="content">
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>Room Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${list}">
+            <td><a th:href="@{|/room/${room.id}|}">[[${room.name}]]</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="create-room">
+    <form th:action="@{/room}" method="post">
+        <input type="text" name="name">
+        <button class="btn btn-secondary" id="btn-create">개설하기</button>
+    </form>
+</div>
+</body>
+</html>

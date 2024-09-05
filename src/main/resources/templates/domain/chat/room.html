@@ -1,0 +1,40 @@
+<html layout:decorate="~{global/user_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>ChatRoom</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/stomp_chat.js" type="module" defer></script>
+    <script th:inline="javascript">
+        const username = /*[[${member.nickname}]]*/ 'guest';
+        const memberId = /*[[${member.id}]]*/ '1';
+        const roomId = /*[[${room.id}]]*/ 'defaultRoomId';
+        const roomName = /*[[${room.name}]]*/ 'defaultRoomName';
+    </script>
+</head>
+<body layout:fragment="content">
+<div class="container">
+    <!-- 채팅방 이름 표시 -->
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 th:text="${room.name}">roomName</h1>
+        </div>
+    </div>
+    <!-- 메시지 표시 영역 -->
+    <div class="row mt-3">
+        <div id="msgArea" class="col-12" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;"></div>
+    </div>
+    <!-- 메시지 입력 영역 -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="input-group">
+                <input type="text" id="msg" class="form-control" placeholder="Type your message">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-send">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<html layout:decorate="~{global/user_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <script src="/js/chat.js" type="module" defer></script>
+    <script th:inline="javascript">
+        const username = /*[[${username}]]*/ 'guest';
+    </script>
+</head>
+<body layout:fragment="content">
+<div>
+    <label><b>채팅방</b></label>
+</div>
+<div>
+    <div id="msgArea"></div>
+    <div>
+        <input type="text" id="msg" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <div>
+            <button type="button" id="button-send">전송</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
