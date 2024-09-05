@@ -9,7 +9,7 @@ $(document).ready(function () {
         if (!name) {
             alert("Please write the name.");
         } else {
-            alert('[ ' +name + ` ] 방이 개설되었습니다.`);
+            // alert('[ ' +name + ` ] 방이 개설되었습니다.`);
             $("form").off('submit').submit(); // 폼 제출 이벤트 리스너 제거 후 제출
         }
     });

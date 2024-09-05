@@ -52,4 +52,9 @@ $(document).ready(function () {
                     </div>`;
         $("#msgArea").append(messageHtml);
     }
+
+
+    // user가 방을 나갈 경우 메세지를 보낸다.
+    // 만약 방장이 방을 나갈 경우 방을 폭파시킨다.
+    window.addEventListener('beforeunload', sendMessage);
 });
