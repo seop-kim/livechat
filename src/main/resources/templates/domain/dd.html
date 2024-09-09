@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Lighthouse with Light Bulb</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #000000;
+            overflow: hidden;
+        }
+
+        svg {
+            width: 100vw;
+            height: 80vh;
+            display: block;
+        }
+
+        #buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .home-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .home-btn:hover {
+            background-color: #666;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+<svg viewBox="0 0 800 600">
+    <defs>
+        <radialGradient id="sun-gradient">
+            <stop id="start-color" offset="0%" style="stop-color:white; stop-opacity:1"/>
+            <stop id="end-color" offset="100%" style="stop-color:white; stop-opacity:0"/>
+        </radialGradient>
+    </defs>
+    <circle id="sun-outer" cx="400" cy="300" r="140" fill="url(#sun-gradient)"/>
+</svg>
+<div id="buttons">
+    <button id="speed-up">속도 증가</button>
+    <button id="speed-down">속도 감소</button>
+</div>
+
+<a class="home-btn" href="/" role="button">HOME</a>
+
+<script>
+    $(document).ready(function () {
+        const sockJs = new SockJS("/stomp/chat");
+        const stomp = Stomp.over(sockJs);
+
+        stomp.connect({}, function (frame) {
+            stomp.subscribe('/sub/chat/room/circle', function (chat) {
+                additionalIncrement = parseInt(chat.body, 10);
+            });
+            stomp.send('/pub/circle/in', {});
+        });
+
+        function sendSpeedUp() {
+            stomp.send('/pub/circle/speed/up', {});
+        }
+
+        function sendSpeedDown() {
+            stomp.send('/pub/circle/speed/down', {});
+        }
+
+        document.getElementById('speed-up').addEventListener('click', sendSpeedUp);
+        document.getElementById('speed-down').addEventListener('click', sendSpeedDown);
+    });
+
+    const circle = document.getElementById('sun-outer');
+    const startColor = document.getElementById('start-color');
+    const endColor = document.getElementById('end-color');
+    const interval = 50;
+    const orbitRadius = 150;
+    const duration = 10000;
+    let angle = 0;
+    let rotationSpeed = 360 / duration * interval;
+    let additionalIncrement = 0;
+    let colorFraction = 0;
+    const colors = Array.from({length: 10}, getRandomColor);
+    let colorIndex = 0;
+    let nextColorIndex = 1;
+
+    function getRandomColor() {
+        return '#' + Array.from({length: 6}, () => '0123456789ABCDEF'[Math.floor(Math.random() * 16)]).join('');
+    }
+
+    function interpolateColor(color1, color2, factor) {
+        return '#' + color1.slice(1).match(/.{2}/g).map((c, i) => {
+            return Math.round(parseInt(c, 16) * (1 - factor) + parseInt(color2.slice(1).match(/.{2}/g)[i], 16) * factor).toString(16).padStart(2, '0');
+        }).join('');
+    }
+
+    function updateAnimation() {
+        colorFraction += 0.01;
+        if (colorFraction > 1) {
+            colorFraction = 0;
+            colorIndex = (colorIndex + 1) % colors.length;
+            nextColorIndex = (colorIndex + 1) % colors.length;
+        }
+
+        const color = interpolateColor(colors[colorIndex], colors[nextColorIndex], colorFraction);
+        startColor.style.stopColor = color;
+        endColor.style.stopColor = color;
+
+        const radius = 140 + (160 - 140) * (Math.sin(colorFraction * Math.PI * 2) / 2 + 0.5);
+        circle.setAttribute('r', radius);
+
+        angle += rotationSpeed + additionalIncrement;
+        const radians = angle * (Math.PI / 180);
+        circle.setAttribute('cx', 400 + orbitRadius * Math.cos(radians));
+        circle.setAttribute('cy', 300 + orbitRadius * Math.sin(radians));
+    }
+
+    setInterval(updateAnimation, interval);
+</script>
+</body>
+</html>
