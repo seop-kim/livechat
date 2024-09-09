@@ -89,6 +89,7 @@
             stomp.subscribe('/sub/chat/room/circle', function (chat) {
                 additionalIncrement = parseInt(chat.body, 10);
             });
+
             stomp.send('/pub/circle/in', {});
         });
 

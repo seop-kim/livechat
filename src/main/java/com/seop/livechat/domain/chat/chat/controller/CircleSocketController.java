@@ -24,15 +24,15 @@ public class CircleSocketController {
 
     @MessageMapping(value = "/circle/speed/up")
     public void up() {
+        circleSpeed += 1;
         log.info("in speed up : cur-speed : " + circleSpeed);
-        circleSpeed++;
         template.convertAndSend(SEND_URL, circleSpeed);
     }
 
     @MessageMapping(value = "/circle/speed/down")
     public void down() {
+        circleSpeed -= 1;
         log.info("in speed down : cur-speed : " + circleSpeed);
-        circleSpeed--;
         template.convertAndSend(SEND_URL, circleSpeed);
     }
 }
