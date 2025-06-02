@@ -12,6 +12,9 @@ $(document).ready(function () {
             const writer = content.writer;
             const message = content.message;
             displayMessage(writer, message);
+            if (writer !== 'ADMIN') {
+                document.getElementById("number").value = parseInt(document.getElementById("number").value, 10) + 1;
+            }
         });
         stomp.send('/pub/chat/enter', {}, JSON.stringify({roomId: roomId, writer: username}));
     });

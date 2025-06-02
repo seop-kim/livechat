@@ -3,6 +3,19 @@
     <meta charset="UTF-8">
     <title>ChatRooms</title>
     <script src="/js/rooms.js" type="module" defer></script>
+</head>
+<body layout:fragment="content">
+<div>
+    <div>
+        <ul th:each="room : ${list}">
+            <li><a th:href="@{|/room/${room.id}|}">[[${room.name}]]</a></li>
+        </ul>
+    </div>
+</div>
+<form th:action="@{/room}" method="post">
+    <input type="text" name="name" class="form-control">
+    <button class="btn btn-secondary" id="btn-create">개설하기</button>
+</form>
     <style>
         table {
             width: 50%;
