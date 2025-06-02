@@ -15,7 +15,6 @@ public class ChatController {
         model.addAttribute("username", user.getUsername());
         return "domain/chat/chat";
     }
-
     @GetMapping("/dd")
     public String dd() {
         return "domain/dd";

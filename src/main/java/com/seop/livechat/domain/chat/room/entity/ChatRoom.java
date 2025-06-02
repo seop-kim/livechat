@@ -3,6 +3,7 @@ package com.seop.livechat.domain.chat.room.entity;
 import com.seop.livechat.domain.chat.chat.entity.StompChat;
 import com.seop.livechat.domain.member.member.entity.Member;
 import com.seop.livechat.global.entity.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -32,7 +33,7 @@ public class ChatRoom extends BaseEntity {
     private Member member;
 
     @Builder.Default
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<StompChat> chats = new ArrayList<>();
 
     public static ChatRoom create(Member member, String name) {
